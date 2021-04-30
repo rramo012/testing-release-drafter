@@ -17,13 +17,13 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - name: test
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      uses: fjogeleit/http-request-action@master
-      with:
+      - uses: CamiloGarciaLaRotta/watermelon-http-client@v1
+        with:
           url: 'https://wiki.central.inmotionhosting.com/graphql'
-          bearerToken: '${{ secrets.CENTRAL_WIKIJS_TOKEN }}'
-          data: |
+          headers: '{"Authorization": "bearer ${{ secrets.CENTRAL_WIKIJS_TOKEN }}" }'
+          method: post
+          graphql: |
             mutation Page {
               pages {
                 create (
@@ -39,7 +39,7 @@ jobs:
                 ) {
                   responseResult {
                     succeeded,
-                  },
+                  }
                 }
               }
             }
