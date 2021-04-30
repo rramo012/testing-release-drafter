@@ -21,7 +21,7 @@ jobs:
       - uses: CamiloGarciaLaRotta/watermelon-http-client@v1
         with:
           url: 'https://wiki.central.inmotionhosting.com/graphql'
-          headers: '{"Authorization": "bearer ${{ secrets.CENTRAL_WIKIJS_TOKEN }}" }'
+          headers: '{"Authorization": "bearer ${{ secrets.CENTRAL_WIKIJS_TOKEN }}", "Content-type": "application/json" }'
           operation_name: Page
           verbose: true
           method: post
