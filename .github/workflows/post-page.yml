@@ -22,6 +22,7 @@ jobs:
         with:
           url: 'https://wiki.central.inmotionhosting.com/graphql'
           headers: '{"Authorization": "bearer ${{ secrets.CENTRAL_WIKIJS_TOKEN }}" }'
+          method: post
           graphql: |
             mutation Page {
               pages {
