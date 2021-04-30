@@ -20,7 +20,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: CamiloGarciaLaRotta/watermelon-http-client@v1
         with:
-          url: 'https://wiki.central.inmotionhosting.com/'
+          url: 'https://wiki.central.inmotionhosting.com/graphql'
           headers: '{"Authorization": "bearer ${{ secrets.CENTRAL_WIKIJS_TOKEN }}" }'
           graphql: |
             mutation Page {
