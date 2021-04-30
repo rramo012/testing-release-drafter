@@ -34,20 +34,12 @@ jobs:
                     isPublished: true, 
                     isPrivate: false, 
                     locale: "en", 
-                    path:"/release/Angular-5644656541", 
+                    path:"/release/Angular-56446565d41", 
                     tags: [], 
                 ) {
                   responseResult {
                     succeeded,
-                    errorCode,
-                    slug,
-                    message
                   },
-                  page {
-                    id,
-                    path,
-                    title
-                  }
                 }
               }
             }
