@@ -36,7 +36,7 @@ jobs:
                     isPublished: true, 
                     isPrivate: false, 
                     locale: "en", 
-                    path:"/release/Angular-56446565d41", 
+                    path:"/release/Angular-56446565gfggfd41", 
                     tags: [], 
                 ) {
                   responseResult {
