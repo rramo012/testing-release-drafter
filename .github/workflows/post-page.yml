@@ -17,6 +17,15 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - uses: octokit/request-action@v2.x
+        id: get_latest_release
+        with:
+          route: GET /repos/{owner}/{repo}/releases/latest
+          owner: rramo012
+          repo: testing-release-drafter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: CamiloGarciaLaRotta/watermelon-http-client@v1
         with:
@@ -29,9 +38,9 @@ jobs:
             mutation Page {
               pages {
                 create (
-                    title:"titolos"
-                    content:"contenuto",
-                    description:"descrizione",
+                    title: "Release - ${{ steps.get_latest_release.outputs.data.tag_name }}",
+                    content: "${{ steps.get_latest_release.outputs.data.body }}",
+                    description: "descrizione",
                     editor: "code",
                     isPublished: true, 
                     isPrivate: false, 
