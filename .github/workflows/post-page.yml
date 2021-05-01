@@ -25,6 +25,13 @@ jobs:
           repo: testing-release-drafter
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          
+      - name: Get Time
+        id: time
+        uses: nanzm/get-time-action@v1.1
+        with:
+          timeZone: 8
+          format: 'YYYY-MM-DD-HH-mm-ss'
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: CamiloGarciaLaRotta/watermelon-http-client@v1
@@ -40,12 +47,12 @@ jobs:
                 create (
                     title: "Release - ${{ steps.get_latest_release.outputs.data.tag_name }}",
                     content: "${{ steps.get_latest_release.outputs.data.body }}",
-                    description: "descrizione",
+                    description: "${{ steps.time.outputs.time }}",
                     editor: "code",
                     isPublished: true, 
                     isPrivate: false, 
                     locale: "en", 
-                    path:"/release/Angular-56446565gfggfd41", 
+                    path:"/release/${{ steps.time.outputs.time }}", 
                     tags: [], 
                 ) {
                   responseResult {
