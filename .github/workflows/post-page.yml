@@ -39,16 +39,15 @@ jobs:
           url: 'https://wiki.central.inmotionhosting.com/graphql'
           headers: '{"Authorization": "bearer ${{ secrets.CENTRAL_WIKIJS_TOKEN }}", "Content-type": "application/json" }'
           operation_name: Page
-          verbose: true
           method: post
           graphql: |
             mutation Page {
               pages {
                 create (
                     title: "Release - ${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}",
-                    content: " ${{ fromJson(steps.get_latest_release.outputs.data).body }}",
+                    content: "${{ fromJson(steps.get_latest_release.outputs.data).body }}",
                     description: "${{ steps.time.outputs.time }}",
-                    editor: "code",
+                    editor: "markdown",
                     isPublished: true, 
                     isPrivate: false, 
                     locale: "en", 
