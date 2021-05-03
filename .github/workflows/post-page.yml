@@ -46,39 +46,4 @@ jobs:
           method: 'POST'
           data: '{"type":"mrkdwn", "text": "${{ steps.slackify.outputs.text }}" }'
 
-      - name: Send Notification
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
-        env:
-          GITHUB_TOKEN: ${{ github.token }} # optional
-          SLACK_WEBHOOK_URL: ${{ secrets.PDT_SLACK_WEBHOOK }} # required
 
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: CamiloGarciaLaRotta/watermelon-http-client@v1
-        with:
-          url: 'https://wiki.central.inmotionhosting.com/graphql'
-          headers: '{"Authorization": "bearer ${{ secrets.CENTRAL_WIKIJS_TOKEN }}", "Content-type": "application/json" }'
-          operation_name: Page
-          method: post
-          graphql: |
-            mutation Page {
-              pages {
-                create (
-                    title: "Release Front End - ${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}",
-                    content: "${{ slackify.text }}",
-                    description: "${{ steps.time.outputs.time }}",
-                    editor: "markdown",
-                    isPublished: true, 
-                    isPrivate: false, 
-                    locale: "en", 
-                    path:"/Releases/${{ steps.time.outputs.time }}", 
-                    tags: [], 
-                ) {
-                  responseResult {
-                    succeeded,
-                  }
-                }
-              }
-            }
