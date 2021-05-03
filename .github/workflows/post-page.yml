@@ -51,7 +51,7 @@ jobs:
                     isPublished: true, 
                     isPrivate: false, 
                     locale: "en", 
-                    path:"/release/${{ steps.time.outputs.time }}", 
+                    path:"/Releases/${{ steps.time.outputs.time }}", 
                     tags: [], 
                 ) {
                   responseResult {
