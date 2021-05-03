@@ -32,6 +32,28 @@ jobs:
         with:
           timeZone: 8
           format: 'YYYY-MM-DD-HH-mm-ss'
+          
+      - name: Slack Markdown Converter
+        uses: LoveToKnow/slackify-markdown-action@v1.0.0
+        id: slackify
+        with:
+          text: ${{ fromJson(steps.get_latest_release.outputs.data).body }}
+          
+      - name: Send Notification
+        uses: fjogeleit/http-request-action@master
+        with:
+          url: ${{ secrets.PDT_SLACK_WEBHOOK }}
+          method: 'POST'
+          data: '{"type":"mrkdwn", "text": "${{ steps.slackify.outputs.text }}" }'
+
+      - name: Send Notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
+        env:
+          GITHUB_TOKEN: ${{ github.token }} # optional
+          SLACK_WEBHOOK_URL: ${{ secrets.PDT_SLACK_WEBHOOK }} # required
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: CamiloGarciaLaRotta/watermelon-http-client@v1
@@ -45,7 +67,7 @@ jobs:
               pages {
                 create (
                     title: "Release Front End - ${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}",
-                    content: "${{ fromJson(steps.get_latest_release.outputs.data).body }}",
+                    content: "${{ slackify.text }}",
                     description: "${{ steps.time.outputs.time }}",
                     editor: "markdown",
                     isPublished: true, 
