@@ -17,10 +17,12 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Set Version
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - uses: octokit/request-action@v2.x
         id: get_latest_release
         with:
-          route: GET /repos/{owner}/{repo}/releases/${GITHUB_REF#refs/*/}
+          route: GET /repos/{owner}/{repo}/releases/${{ env.RELEASE_VERSION }}
           owner: rramo012
           repo: testing-release-drafter
         env:
