@@ -22,7 +22,7 @@ jobs:
       - uses: octokit/request-action@v2.x
         id: get_latest_release
         with:
-          route: GET /repos/{owner}/{repo}/releases/${{ env.RELEASE_VERSION }}
+          route: GET /repos/{owner}/{repo}/releases/tags/${{ env.RELEASE_VERSION }}
           owner: rramo012
           repo: testing-release-drafter
         env:
