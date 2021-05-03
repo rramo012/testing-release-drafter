@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [ released ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -20,7 +20,7 @@ jobs:
       - uses: octokit/request-action@v2.x
         id: get_latest_release
         with:
-          route: GET /repos/{owner}/{repo}/releases/latest
+          route: GET /repos/{owner}/{repo}/releases/${GITHUB_REF#refs/*/}
           owner: rramo012
           repo: testing-release-drafter
         env:
@@ -39,11 +39,4 @@ jobs:
         with:
           text: ${{ fromJson(steps.get_latest_release.outputs.data).body }}
           
-      - name: Send Notification
-        uses: fjogeleit/http-request-action@master
-        with:
-          url: ${{ secrets.PDT_SLACK_WEBHOOK }}
-          method: 'POST'
-          data: '{"blocks": [{"type": "context","elements": [{"type": "mrkdwn","text": "A release has been published for the Central front end applications."}]},{"type": "divider"},{"type": "section","fields": [{"type": "mrkdwn","text": "${{ steps.slackify.outputs.text }}"}]},{"type": "section","fields": [{"type": "mrkdwn","text": "*Version* \n ${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}"},{"type": "mrkdwn","text": "*Application* \n Central - Angular Front End"}]}]}'
-
 
