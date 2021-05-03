@@ -44,6 +44,6 @@ jobs:
         with:
           url: ${{ secrets.PDT_SLACK_WEBHOOK }}
           method: 'POST'
-          data: '{"type":"mrkdwn", "text": "${{ steps.slackify.outputs.text }}" }'
+          data: '{"blocks": [{"type": "context","elements": [{"type": "mrkdwn","text": "A release has been published for the Central front end applications."}]},{"type": "divider"},{"type": "section","fields": [{"type": "mrkdwn","text": "*Changelog* \n`${{ steps.slackify.outputs.text }}`"}]},{"type": "section","fields": [{"type": "mrkdwn","text": "*Version* \n ${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}"},{"type": "mrkdwn","text": "*Application* \n Central - Angular Front End"}]}]}'
 
 
