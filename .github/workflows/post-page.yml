@@ -38,19 +38,6 @@ jobs:
           timeZone: 8
           format: 'YYYY-MM-DD-HH-mm-ss'
           
-      - name: Slack Markdown Converter
-        uses: LoveToKnow/slackify-markdown-action@v1.0.0
-        id: slackify
-        with:
-          text: ${{ fromJson(steps.get_latest_release.outputs.data).body }}
-          
-      - name: Send Notification
-        uses: fjogeleit/http-request-action@master
-        with:
-          url: ${{ secrets.PDT_SLACK_WEBHOOK }}
-          method: 'POST'
-          data: '{"blocks": [{"type": "context","elements": [{"type": "mrkdwn","text": "A release has been published to the Central applications."}]},{"type": "divider"},{"type": "section","fields": [{"type": "mrkdwn","text": "${{ steps.slackify.outputs.text }}"}]},{"type": "section","fields": [{"type": "mrkdwn","text": "*Version* \n ${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}"},{"type": "mrkdwn","text": "*Application* \n Central - Angular Front End"}]}]}'
-
       - uses: CamiloGarciaLaRotta/watermelon-http-client@v1
         with:
           url: 'https://wiki.central.inmotionhosting.com/graphql'
