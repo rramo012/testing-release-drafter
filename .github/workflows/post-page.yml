@@ -44,4 +44,37 @@ jobs:
         with:
           text: ${{ fromJson(steps.get_latest_release.outputs.data).body }}
           
+      - name: Send Notification
+        uses: fjogeleit/http-request-action@master
+        with:
+          url: ${{ secrets.PDT_SLACK_WEBHOOK }}
+          method: 'POST'
+          data: '{"blocks": [{"type": "context","elements": [{"type": "mrkdwn","text": "A release has been published to the Central applications."}]},{"type": "divider"},{"type": "section","fields": [{"type": "mrkdwn","text": "${{ steps.slackify.outputs.text }}"}]},{"type": "section","fields": [{"type": "mrkdwn","text": "*Version* \n ${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}"},{"type": "mrkdwn","text": "*Application* \n Central - Angular Front End"}]}]}'
+
+      - uses: CamiloGarciaLaRotta/watermelon-http-client@v1
+        with:
+          url: 'https://wiki.central.inmotionhosting.com/graphql'
+          headers: '{"Authorization": "bearer ${{ secrets.CENTRAL_WIKIJS_TOKEN }}", "Content-type": "application/json" }'
+          operation_name: Page
+          method: post
+          graphql: |
+            mutation Page {
+              pages {
+                create (
+                    title: "Release Front End - ${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}",
+                    content: "${{ fromJson(steps.get_latest_release.outputs.data).body }}",
+                    description: "${{ steps.time.outputs.time }}",
+                    editor: "markdown",
+                    isPublished: true, 
+                    isPrivate: false, 
+                    locale: "en", 
+                    path:"/Releases/${{ steps.time.outputs.time }}", 
+                    tags: [], 
+                ) {
+                  responseResult {
+                    succeeded,
+                  }
+                }
+              }
+            }
 
