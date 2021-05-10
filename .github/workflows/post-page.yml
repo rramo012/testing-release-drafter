@@ -30,7 +30,6 @@ jobs:
           repo: testing-release-drafter
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-      - run: "echo latest release: ${{ fromJson(steps.get_latest_release.outputs.data).body }}"
 
       - name: Get Time
         id: time
@@ -50,7 +49,7 @@ jobs:
               pages {
                 create (
                     title: "Release Front End - ${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}",
-                    content: "${{ fromJson(steps.get_latest_release.outputs.data).body }}",
+                    content: "testing\r\ndsfsdf",
                     description: "${{ steps.time.outputs.time }}",
                     editor: "markdown",
                     isPublished: true, 
