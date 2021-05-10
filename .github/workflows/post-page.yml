@@ -37,7 +37,11 @@ jobs:
         with:
           timeZone: 8
           format: 'YYYY-MM-DD-HH-mm-ss'
-          
+      - name: Choose Tag
+        shell: bash
+        id: vars
+        run: |
+            echo DEPLOYMENT_TAG="${{ fromJson(steps.get_latest_release.outputs.data).body }}" >> $GITHUB_ENV
       - uses: CamiloGarciaLaRotta/watermelon-http-client@v1
         with:
           url: 'https://wiki.central.inmotionhosting.com/graphql'
@@ -49,7 +53,7 @@ jobs:
               pages {
                 create (
                     title: "Release Front End - ${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}",
-                    content: "testing\r\ndsfsdf",
+                    content: "${{ env.DEPLOYMENT_TAG }}",
                     description: "${{ steps.time.outputs.time }}",
                     editor: "markdown",
                     isPublished: true, 
